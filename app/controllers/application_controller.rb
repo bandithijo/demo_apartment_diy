@@ -2,10 +2,12 @@ class ApplicationController < ActionController::Base
   before_action :configure_permitted_parameters, if: :devise_controller?
   before_action :set_account
 
-  private
+  def require_account!
+    redirect_to root_url(subdomain: nil)
+  end
 
   def set_account
-    @account = Account.find_by(subdomain: request.subdomain)
+    @account = Account.find_by(subdomain: request.subdomain) unless @account.present?
   end
 
   def configure_permitted_parameters
